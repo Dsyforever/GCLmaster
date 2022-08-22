@@ -31,6 +31,7 @@ def parse_args():
     parser.add_argument('--Epoch', type=int, default=100)
     parser.add_argument('--pretrain_param', type=bool, default=False)
     parser.add_argument('--topology', type=int, default=0)
+    parser.add_argument('--log_root', type=int, default='none') # 日志的保存地址。如果为none，就不保存日志。
     args = parser.parse_args()
     print_options(parser, args)
     return args

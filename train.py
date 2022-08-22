@@ -20,7 +20,7 @@ if __name__ == "__main__":
     lossf=Getloss(args.stragety)
 
     # use to record the result
-    result = {'train': {'acc': []}, 'test': {'acc': []}}
+    result = {'epoch':[], 'train': {'acc': []}, 'test': {'acc': []}}
     # begin to train
     for epoch in tqdm(args.Epoch):
         total_loss = 0
@@ -54,6 +54,7 @@ if __name__ == "__main__":
 
         result['train']['acc'].append(train_accurary)
         result['test']['acc'].append(test_accurary)
+        result['epoch'].append(epoch)
 
         print("{epoch_index} epoch's train_accurary is {trainacc},train_loss is {losst}, test_accurary is {testacc}.".format(epoch_index=epoch,trainacc=train_accurary,losst=total_loss ,testacc=test_accurary))
 
