@@ -8,7 +8,6 @@ import torch
 from options import *
 
 if __name__ == "__main__":
-
     args = parse_args()
     num_class = Getnumclass(args.task)
     train_dataset,test_dataset= Getdataset(args.task,args.data_dir)
@@ -19,8 +18,7 @@ if __name__ == "__main__":
     model=model.cuda()
     lossf=Getloss(args.stragety)
 
-
-    for epoch in range(args.Epoch):
+    for epoch in tqdm(args.Epoch):
         total_loss = 0
         train_correct = 0
         test_correct = 0
@@ -46,9 +44,11 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
             total_loss += loss.item()
+
         train_accurary = valid(model, train_dataset, args)
         test_accurary=valid(model,test_dataset,args)
         print("{epoch_index} epoch's train_accurary is {trainacc},train_loss is {losst}, test_accurary is {testacc}.".format(epoch_index=epoch,trainacc=train_accurary,losst=total_loss ,testacc=test_accurary))
+
         #save checkpoint
         if epoch%20==0:
             state = {
