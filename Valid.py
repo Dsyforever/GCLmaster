@@ -24,5 +24,5 @@ def valid(model, v_dataset, top_k, arg):
                     outputs[torch.arange(0, outputs.shape[0], 1), idxmax] = -1
                     idxeq = (idxeq == False)
                     outputs, labels = outputs[idxeq], labels[idxeq]
-            accuracy = acc_number / len(v_dataset)
+    accuracy = acc_number / len(v_dataset)
     return accuracy
