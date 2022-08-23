@@ -1,18 +1,28 @@
 import torch
-from Dataset import Getnumclass
-#Valid dataset
+from torch.utils.data import DataLoader
 
 
-
-def valid(model,v_dataset,arg):
-    data_loaders = torch.utils.data.DataLoader(v_dataset, batch_size=arg.batchsize, shuffle=True)
-    acc_number_total=0
+def valid(model, v_dataset, top_k, arg):
+    data_loaders = DataLoader(v_dataset, batch_size = arg.batchsize, shuffle = True)
+    acc_number = 0
     for id, batch in enumerate(data_loaders):
         images, labels = batch
         images = images.cuda()
         labels = labels.cuda()
-        outs = model(images)
-        acc_number=outs.argmax(dim=1).eq(labels).sum().item()
-        acc_number_total+=acc_number
-    accuracy=acc_number_total/len(v_dataset)
+        outputs = model(images)
+        if categories:= outputs.shape[1] <= top_k:
+            print('It\'s meaningless to compute {0:top_k} accuracy on a dataset with {1:categories} \
+                categories.'.format(top_k = top_k, categories = categories))
+            return 1.0
+        else:
+            #outputs = outputs.copy()
+            for i in range(0, top_k):
+                if outputs.shape[0]:
+                    idxmax = outputs.argmax(dim = 1)
+                    idxeq = idxmax.eq(labels)
+                    acc_number += idxeq.sum().item()
+                    outputs[torch.arange(0, outputs.shape[0], 1), idxmax] = -1
+                    idxeq = (idxeq == False)
+                    outputs, labels = outputs[idxeq], labels[idxeq]
+            accuracy = acc_number / len(v_dataset)
     return accuracy
