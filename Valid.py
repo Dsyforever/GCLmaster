@@ -10,7 +10,7 @@ def valid(model, v_dataset, top_k, arg):
         images, labels = images.cuda(), labels.cuda()
         outputs = model(images)
         if categories:= outputs.shape[1] <= top_k:
-            print('It\'s meaningless to compute {0:top_k} accuracy on a dataset with {1:categories} \
+            print('It\'s meaningless to compute top{0:top_k} accuracy on a dataset with {1:categories} \
                 categories.'.format(top_k = top_k, categories = categories))
             return 1.0
         else:
