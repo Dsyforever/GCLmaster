@@ -15,7 +15,7 @@ def print_root(args):
     return f,t
 
 
-def picture(args, epoch, result, time):
+def picture(args, result, time):
     plt.figure()
     train_loss = plt.plot(result['epoch'], result['train']['acc'], color='red', linestyle='-.')
     test_loss = plt.plot(result['epoch'], result['test']['acc'], color='blue', linestyle='--')
