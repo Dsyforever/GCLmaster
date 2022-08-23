@@ -73,7 +73,7 @@ if __name__ == "__main__":
         print('[{:s}]\t\t{:s}: {:.4f}\n'.format('val', 'Acc', val_accurary), file=file)
 
         if args.is_picture:
-            picture(args,epoch,result,time)
+            picture(args,result,time)
 
 
 
