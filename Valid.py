@@ -7,8 +7,7 @@ def valid(model, v_dataset, top_k, arg):
     acc_number = 0
     for id, batch in enumerate(data_loaders):
         images, labels = batch
-        images = images.cuda()
-        labels = labels.cuda()
+        images, labels = images.cuda(), labels.cuda()
         outputs = model(images)
         if categories:= outputs.shape[1] <= top_k:
             print('It\'s meaningless to compute {0:top_k} accuracy on a dataset with {1:categories} \
