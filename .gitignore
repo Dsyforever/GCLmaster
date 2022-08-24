@@ -1,14 +1,4 @@
 
-test,py
-*.pyc
-*.pyc
-*.pyc
-*.pyc
-__pycache__/Dataset.cpython-39.pyc
 *.gz
-data/cifar-10-batches-py/batches.meta
 data/cifar-10-batches-py/data_batch_2
-data/cifar-10-batches-py/data_batch_3
-data/cifar-10-batches-py/data_batch_4
-data/cifar-10-batches-py/data_batch_5
-data/cifar-10-batches-py/test_batch
+data/cifar-10-batches-py/data_batch_1
