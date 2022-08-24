@@ -14,6 +14,8 @@ def valid(model, v_dataset, arg, device):
                 categories.'.format(top_k = arg.top_k, categories = categories))
             return 1.0
         else:
+
+            
             for i in range(0, arg.top_k):
                 if outputs.shape[0]:
                     idxmax = outputs.argmax(dim = 1)
