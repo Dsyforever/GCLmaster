@@ -1,7 +1,7 @@
 from Model import Getmodel
-from Dataset import Getdataset,Getnumclass
+from Dataset import Getdataset, Getnumclass
 from Optimizers import Getoptim
-from stragety import  Getloss
+from stragety import Getloss
 from Valid import valid
 import torch
 from options import *
@@ -14,17 +14,17 @@ if __name__ == "__main__":
     args, parser = parse_args()
 
     num_class = Getnumclass(args.task)
-    train_dataset,test_dataset,val_dataset= Getdataset(args.task,args.data_dir)
-    model= Getmodel(args.task,args.backbone,num_class,args.stragety,args.pretrain_param)
+    train_dataset, test_dataset, val_dataset = Getdataset(args.task, args.data_dir)
+    model = Getmodel(args.task, args.backbone, num_class, args.stragety, args.pretrain_param)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batchsize, shuffle=True)
     Hparam = [{"params": model.parameters(), "lr": args.lr}]
     optimizer = Getoptim(args.CLoptimizer, Hparam)
-    model=model.cuda()
-    lossf=Getloss(args.stragety)
+    model = model.cuda()
+    lossf = Getloss(args.stragety)
 
     # use to record the result
-    result = {'epoch':[], 'train': {'acc': []}, 'val': {'acc': []}, 'test': {'acc': []}}
-    file,time = print_root(args)
+    result = {'epoch': [], 'train': {'acc': []}, 'val': {'acc': []}, 'test': {'acc': []}}
+    file, time = print_root(args)
     print_options(parser, args, file=file)
     # begin to train
     for epoch in tqdm(range(args.Epoch), file=file):
@@ -38,18 +38,17 @@ if __name__ == "__main__":
             labels = labels.cuda()
             labels_cal = torch.nn.functional.one_hot(labels, num_class).type(torch.float32).cuda()
             outs = model(images)
-            
-            #topology loss by metic
-            topology_loss=0
-            lossft= torch.nn.MSELoss(reduce=True)
-            if args.topology!=0:
-                for i in range(args.topology): 
-                    dxi=args.Q*2*(torch.rand(images.shape)-0.5).to(images.device)+images
-                    topology_loss+=lossft(outs,model(dxi))
-                topology_loss=topology_loss/args.topology
-                
-                    
-            loss = lossf(outs, labels_cal)+topology_loss
+
+            # topology loss by metic
+            topology_loss = 0
+            lossft = torch.nn.MSELoss(reduce=True)
+            if args.topology != 0:
+                for i in range(args.topology):
+                    dxi = args.Q * 2 * (torch.rand(images.shape) - 0.5).to(images.device) + images
+                    topology_loss += lossft(outs, model(dxi))
+                topology_loss = topology_loss / args.topology
+
+            loss = lossf(outs, labels_cal) + topology_loss
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -64,7 +63,7 @@ if __name__ == "__main__":
         if val_dataset != None:
             val_accurary = valid(model, val_dataset, args)
         else:
-            val_accurary=0
+            val_accurary = 0
         result['val']['acc'].append(val_accurary)
 
         # print("{epoch_index} epoch's train_accurary is {trainacc},train_loss is {losst}, test_accurary is {testacc}.".format(epoch_index=epoch,trainacc=train_accurary,losst=total_loss ,testacc=test_accurary))
@@ -73,9 +72,11 @@ if __name__ == "__main__":
         print('[{:s}]\t\t{:s}: {:.4f}\n'.format('val', 'Acc', val_accurary), file=file)
 
         if args.is_picture:
-            picture(args,result,time)
+            picture(args, result, time)
+        # model save
 
-
+        if epoch % args.save_epoch == 0:
+            model_save(args, model, optimizer, epoch, loss, time)
 
         # #save checkpoint
         # if epoch%20==0:
