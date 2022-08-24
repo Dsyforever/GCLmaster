@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 def print_root(args):
     # get the time
     t = time.strftime('%m月%d日-%H时%M分', time.localtime(time.time()))
-    os.makedirs(args.log_root + '_(' + t + ')', exist_ok=True)
     if args.log_root != 'none':
+        os.makedirs(args.log_root + '_(' + t + ')', exist_ok=True)
         f = open(args.log_root + '_(' + t + ')/'+ args.log_root + '_(' + t + ')' + '.txt', 'a')
     else:
         f = sys.stdout
-    return f,t
+    return f, t
 
 
 def picture(args, result, time):

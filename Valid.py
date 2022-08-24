@@ -2,21 +2,21 @@ import torch
 from torch.utils.data import DataLoader
 
 
-def valid(model, v_dataset, top_k, arg):
+def valid(model, v_dataset, arg, device):
     data_loaders = DataLoader(v_dataset, batch_size = arg.batchsize, shuffle = True)
     acc_number = 0
     for id, batch in enumerate(data_loaders):
         images, labels = batch
-        images = images.cuda()
-        labels = labels.cuda()
+        images = images.to(device)
+        labels = labels.to(device)
         outputs = model(images)
-        if categories:= outputs.shape[1] <= top_k:
+        if categories:= outputs.shape[1] <= arg.top_k:
             print('It\'s meaningless to compute {0:top_k} accuracy on a dataset with {1:categories} \
-                categories.'.format(top_k = top_k, categories = categories))
+                categories.'.format(top_k = arg.top_k, categories = categories))
             return 1.0
         else:
             #outputs = outputs.copy()
-            for i in range(0, top_k):
+            for i in range(0, arg.top_k):
                 if outputs.shape[0]:
                     idxmax = outputs.argmax(dim = 1)
                     idxeq = idxmax.eq(labels)

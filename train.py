@@ -12,6 +12,7 @@ from Save import *
 if __name__ == "__main__":
     # get arguments
     args, parser = parse_args()
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     num_class = Getnumclass(args.task)
     train_dataset,test_dataset,val_dataset= Getdataset(args.task,args.data_dir)
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batchsize, shuffle=True)
     Hparam = [{"params": model.parameters(), "lr": args.lr}]
     optimizer = Getoptim(args.CLoptimizer, Hparam)
-    model=model.cuda()
+    model=model.to(device)
     lossf=Getloss(args.stragety)
 
     # use to record the result
@@ -34,8 +35,8 @@ if __name__ == "__main__":
 
         for id, batch in enumerate(train_loader):
             images, labels = batch
-            images = images.cuda()
-            labels = labels.cuda()
+            images = images.to(device)
+            labels = labels.to(device)
             labels_cal = torch.nn.functional.one_hot(labels, num_class).type(torch.float32).cuda()
             outs = model(images)
             
@@ -55,8 +56,8 @@ if __name__ == "__main__":
             optimizer.step()
             total_loss += loss.item()
 
-        train_accurary = valid(model, train_dataset, args)
-        test_accurary = valid(model, test_dataset, args)
+        train_accurary = valid(model, train_dataset, args, device)
+        test_accurary = valid(model, test_dataset, args, device)
         result['train']['acc'].append(train_accurary)
         result['test']['acc'].append(test_accurary)
         result['epoch'].append(epoch)
@@ -74,7 +75,6 @@ if __name__ == "__main__":
 
         if args.is_picture:
             picture(args,result,time)
-
 
 
         # #save checkpoint
