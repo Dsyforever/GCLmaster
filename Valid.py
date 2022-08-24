@@ -13,6 +13,11 @@ def valid(model, v_dataset, arg, device):
         if categories:= outputs.shape[1] <= arg.top_k:
             print('It\'s meaningless to compute {0:top_k} accuracy on a dataset with {1:categories} \
                 categories.'.format(top_k = arg.top_k, categories = categories))
+        images, labels = images.cuda(), labels.cuda()
+        outputs = model(images)
+        if categories:= outputs.shape[1] <= top_k:
+            print('It\'s meaningless to compute top{0:top_k} accuracy on a dataset with {1:categories} \
+                categories.'.format(top_k = top_k, categories = categories))
             return 1.0
         else:
             #outputs = outputs.copy()
@@ -24,5 +29,5 @@ def valid(model, v_dataset, arg, device):
                     outputs[torch.arange(0, outputs.shape[0], 1), idxmax] = -1
                     idxeq = (idxeq == False)
                     outputs, labels = outputs[idxeq], labels[idxeq]
-            accuracy = acc_number / len(v_dataset)
+    accuracy = acc_number / len(v_dataset)
     return accuracy

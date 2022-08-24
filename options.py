@@ -35,5 +35,6 @@ def parse_args():
     parser.add_argument('--log_root', type=str, default='none') # 日志的保存地址。如果为none，就不保存日志。不需要加.txt
     parser.add_argument('--is_picture', type=int, default=0) # 是否保存图片，如果保存，图片将会和日志存储在同一个文件夹，并且和日志名字相同
     parser.add_argument('--top_k', type=int, default=1) # top-k准确率
+    parser.add_argument('--save_epoch', type=int, default=20, help='Number of epochs to save model.')
     args = parser.parse_args()
     return args, parser
