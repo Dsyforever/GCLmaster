@@ -33,14 +33,15 @@ def picture(args, result, time):
     plt.savefig(args.log_root + '_(' + time + ')/' + args.log_root + '_(' + time + ')' + ".png")
 
 
-def model_save(args,model,optimizer, epoch, loss,time):
+def model_save(args,model,optimizer, epoch, loss, time):
+    os.makedirs(args.log_root + '_(' + time + ')/checkpoints', exist_ok=True)
     torch.save({
         'epoch': epoch,  # 保存是第几个epoch的模型
         'model_state_dict': model.state_dict(),  # 保存模型的参数而非模型的全部
         'optimizer_state_dict': optimizer.state_dict(),  # 保存优化器参数
         'task': args.task,  # 保存任务
         'loss': loss
-    }, args.log_root + '_(' + time + ')/checkpoint'+ args.log_root + '_(' + time + ')' + ".pkl")
+    }, args.log_root + '_(' + time + ')/checkpoints/'+ '_epoch' + str(epoch) + ".pt")
 
     # import os
     # from tqdm import tqdm
