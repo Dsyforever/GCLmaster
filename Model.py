@@ -1,7 +1,10 @@
 import torch
 # from  torch import
 import torchvision
+<<<<<<< HEAD
 import timm
+=======
+>>>>>>> ac081b286b2db9ccfcf4da0ed7a3427a2ee75314
 from Vits import define_Vit
 
 class Softmaxnet(torch.nn.Module):
@@ -25,6 +28,7 @@ def Getmodel(task,backbone,n_classes,stragety,pretrain_param):
         if pretrain_param==True:
             model = timm.create_model('wide_resnet50_2', pretrained=True, num_classes=0)
         else:
+<<<<<<< HEAD
             model = timm.create_model('wide_resnet50_2', pretrained=False, num_classes=0)
 
     if backbone=="resnet101":
@@ -42,6 +46,13 @@ def Getmodel(task,backbone,n_classes,stragety,pretrain_param):
     if backbone[:3]=='vit':
         model=define_Vit(backbone,n_classes,pretrain_param)
 
+=======
+            model= torchvision.models.resnet18(pretrained=False)
+    if backbone[:3]=='vit':
+        model=define_Vit(backbone,n_classes,pretrain_param)
+
+    
+>>>>>>> ac081b286b2db9ccfcf4da0ed7a3427a2ee75314
     if (task=="CIFAR10" or task=="CIFAR10_noresize")  and stragety != "CrossEntropy":
         model.fc = Softmaxnet(2048, n_classes)
     elif backbone[:8]=="resnet50":
