@@ -8,6 +8,7 @@ from options import *
 import time
 from tqdm import tqdm
 from Save import *
+from Augmentation import get_aug
 
 if __name__ == "__main__":
     # get arguments
@@ -37,6 +38,8 @@ if __name__ == "__main__":
 
         for id, batch in enumerate(train_loader):
             images, labels = batch
+            aug = get_aug(image_size=10)
+            images1 = aug(images)
             images = images.to(device)
             labels = labels.to(device)
             labels_cal = torch.nn.functional.one_hot(labels, num_class).type(torch.float32).cuda()

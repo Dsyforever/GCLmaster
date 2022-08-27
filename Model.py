@@ -15,6 +15,12 @@ class Softmaxnet(torch.nn.Module):
         return x
 
 def Getmodel(task,backbone,n_classes,stragety,pretrain_param):
+    if backbone == "resnet18":
+        if pretrain_param == True:
+            model = torchvision.models.resnet18(pretrained=True)
+        else:
+            model = torchvision.models.resnet18(pretrained=False)
+
     if backbone=="resnet50":
         if pretrain_param==True:
             model= torchvision.models.resnet50(pretrained=True)
@@ -48,6 +54,8 @@ def Getmodel(task,backbone,n_classes,stragety,pretrain_param):
         model.fc = torch.nn.Linear(2048, n_classes)
     elif backbone[:9]=="resnet101":
         model.fc = torch.nn.Linear(2048, n_classes)
+    elif backbone[:8] == "resnet18":
+        model.fc = torch.nn.Linear(512, n_classes)
         
     return model
 

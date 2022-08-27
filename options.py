@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument('--task', type=str, default="CIFAR10")  # 任务
     parser.add_argument('--stragety', type=str, default="CrossEntropy")  # 策略
     parser.add_argument('--data_dir', type=str, default="./data")  # 数据集路径
-    parser.add_argument('--batchsize', type=int, default=356)  # BS
+    parser.add_argument('--batchsize', type=int, default=3)  # BS 356
     parser.add_argument('--lr', type=float, default=3e-4)
     parser.add_argument('--backbone', type=str, default="resnet18")
     parser.add_argument('--CLoptimizer', type=str, default="SGD")
