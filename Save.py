@@ -9,6 +9,9 @@ import torch
 def print_root(args):
     # get the time
     t = time.strftime('%m月%d日-%H时%M分', time.localtime(time.time()))
+    if args.log_root != 'none':
+        os.makedirs(args.log_root + '_(' + t + ')', exist_ok=True)
+        f = open(args.log_root + '_(' + t + ')/'+ args.log_root + '_(' + t + ')' + '.txt', 'a')
     os.makedirs(args.log_root + '_(' + t + ')', exist_ok=True)
     # create dir for model save
     os.makedirs(args.log_root + '_(' + t + ')/checkpoint', exist_ok=True)
@@ -30,14 +33,15 @@ def picture(args, result, time):
     plt.savefig(args.log_root + '_(' + time + ')/' + args.log_root + '_(' + time + ')' + ".png")
 
 
-def model_save(args,model,optimizer, epoch, loss,time):
+def model_save(args,model,optimizer, epoch, loss, time):
+    os.makedirs(args.log_root + '_(' + time + ')/checkpoints', exist_ok=True)
     torch.save({
         'epoch': epoch,  # 保存是第几个epoch的模型
         'model_state_dict': model.state_dict(),  # 保存模型的参数而非模型的全部
         'optimizer_state_dict': optimizer.state_dict(),  # 保存优化器参数
         'task': args.task,  # 保存任务
         'loss': loss
-    }, args.log_root + '_(' + time + ')/checkpoint'+ args.log_root + '_(' + time + ')' +".pkl")
+    }, args.log_root + '_(' + time + ')/checkpoints/'+ '_epoch' + str(epoch) + ".pt")
 
     # import os
     # from tqdm import tqdm
